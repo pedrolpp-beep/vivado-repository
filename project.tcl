@@ -10,10 +10,10 @@ set bitstream_file [file join $root_dir build bitstream ${top}.bit]
 
 # Adicione aqui os arquivos do seu projeto, incluindo fontes externas.
 # add_files mantem referencias aos originais; nao copia o RTL para build/.
-set rtl_files [list [file join $root_dir rtl top.v]]
+set rtl_files [list [file join $root_dir rtl top.vhd]]
 set xdc_files [list [file join $root_dir constraints ax7350b.xdc]]
 set include_dirs [list [file join $root_dir rtl]]
-set verilog_defines {}
+set VHDL_defines {}
 
 # Se houver mais de um cabo/FPGA, restrinja os padroes abaixo.
 # O ARM DAP do Zynq nao corresponde a xc7z035_*.

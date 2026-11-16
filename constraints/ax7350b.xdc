@@ -1,5 +1,7 @@
-# Pinagem e niveis: tutorial ALINX AX7350B, experimento PL LED.
-# https://ax7350b-20231-v101.readthedocs.io/zh-cn/latest/7350B_S1_RSTdocument_CN/04_PL%E7%9A%84LED%E5%AE%9E%E9%AA%8C_CN.html
+###############################################################################
+# AX7350B - 30 MHz GTX TX
+# Device: XC7Z035-2FFG676
+###############################################################################
 
 # Botão de start
 set_property PACKAGE_PIN H7 [get_ports btn_start]
@@ -9,17 +11,54 @@ set_property IOSTANDARD LVCMOS15 [get_ports btn_start]
 set_property PACKAGE_PIN H8 [get_ports btn_stop]
 set_property IOSTANDARD LVCMOS15 [get_ports btn_stop]
 
-# Oscilador PL de 50 MHz (BANK35, 1,8 V).
-set_property -dict {PACKAGE_PIN J14 IOSTANDARD LVCMOS18} [get_ports sys_clk]
-create_clock -name sys_clk -period 20.000 [get_ports sys_clk]
+set_false_path -from [get_ports btn_start]
+set_false_path -from [get_ports btn_stop]
 
-# PL_LED1 a PL_LED4 (BANK34, 1,5 V), ativos em nivel alto.
-set_property IOSTANDARD LVCMOS15 [get_ports {led[*]}]
-set_property PACKAGE_PIN F5 [get_ports {led[0]}]
-set_property PACKAGE_PIN E5 [get_ports {led[1]}]
-set_property PACKAGE_PIN G5 [get_ports {led[2]}]
-set_property PACKAGE_PIN G6 [get_ports {led[3]}]
+# LED de indicação do envio do sinal
+set_property PACKAGE_PIN E5 [get_ports led_idle]
+set_property IOSTANDARD LVCMOS15 [get_ports led_idle]
 
-# LEDs sao indicadores sem interface sincrona externa.
-# O caminho ate os registradores dos LEDs continua sujeito ao clock acima.
-set_false_path -to [get_ports {led[*]}]
+###############################################################################
+# 1) System clock
+# On-board PL oscillator: 50 MHz
+###############################################################################
+
+set_property PACKAGE_PIN J14 [get_ports sys_clk]
+set_property IOSTANDARD LVCMOS18 [get_ports sys_clk]
+
+create_clock -name sys_clk \
+    -period 20.000 \
+    [get_ports sys_clk]
+
+
+###############################################################################
+# 2) GTX reference clock
+# MGTREFCLK1 of BANK 111
+# P = AA6
+# N = AA5
+# Frequency = 156.25 MHz
+###############################################################################
+
+set_property PACKAGE_PIN AA6 [get_ports gt_refclk_p]
+set_property PACKAGE_PIN AA5 [get_ports gt_refclk_n]
+
+create_clock -name gt_refclk_156m25 \
+    -period 6.400 \
+    [get_ports gt_refclk_p]
+
+
+###############################################################################
+# 3) GTX physical location
+# Selected in the 7-Series Transceivers Wizard:
+# GTX_X0Y11
+#
+# Dedicated TX pins:
+#   TXP -> AC2 -> SMA_TX_P
+#   TXN -> AC1 -> SMA_TX_N
+#
+# Do NOT assign AC1/AC2 as normal PACKAGE_PIN constraints.
+###############################################################################
+
+set_property LOC GTXE2_CHANNEL_X0Y11 \
+    [get_cells -hierarchical \
+     -filter {REF_NAME == GTXE2_CHANNEL && NAME =~ *gtxe2_i}]
