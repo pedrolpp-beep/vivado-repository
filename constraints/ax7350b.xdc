@@ -5,6 +5,10 @@
 set_property PACKAGE_PIN H7 [get_ports btn_start]
 set_property IOSTANDARD LVCMOS15 [get_ports btn_start]
 
+# Botão de stop
+set_property PACKAGE_PIN H8 [get_ports btn_stop]
+set_property IOSTANDARD LVCMOS15 [get_ports btn_stop]
+
 # Oscilador PL de 50 MHz (BANK35, 1,8 V).
 set_property -dict {PACKAGE_PIN J14 IOSTANDARD LVCMOS18} [get_ports sys_clk]
 create_clock -name sys_clk -period 20.000 [get_ports sys_clk]

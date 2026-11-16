@@ -4,6 +4,7 @@
 // AX7350B: clock PL de 50 MHz; quatro LEDs ativos em nivel alto.
 module top (
     input  wire       btn_start,
+    input  wire       btn_stop,
     input  wire       sys_clk,
     output reg  [3:0] led = 4'b0000
 );
@@ -12,14 +13,21 @@ module top (
     reg [25:0] counter = 26'd0;
 
     always @(posedge sys_clk) begin
-        if (!btn_start) rodando <= 1;
-        if (rodando) begin
-            if (counter == 26'd49_999_999) begin
-                counter <= 26'd0;
-                led <= ~led;
-            end else begin
-                counter <= counter + 26'd1;
-            end
+        if (!btn_stop) begin
+            rodando <= 0;
+            counter <= 26'd0;
+            led <= 4'b0000;
+        end else begin
+            if (!btn_start) rodando <= 1;
+        
+            if (rodando) begin
+                if (counter == 26'd49_999_999) begin
+                    counter <= 26'd0;
+                    led <= ~led;
+                end else begin
+                    counter <= counter + 26'd1;
+                end
+            end 
         end
     end
 endmodule
