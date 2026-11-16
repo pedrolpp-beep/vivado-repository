@@ -1,6 +1,10 @@
 # Pinagem e niveis: tutorial ALINX AX7350B, experimento PL LED.
 # https://ax7350b-20231-v101.readthedocs.io/zh-cn/latest/7350B_S1_RSTdocument_CN/04_PL%E7%9A%84LED%E5%AE%9E%E9%AA%8C_CN.html
 
+# Botão de start
+set_property PACKAGE_PIN H7 [get_ports btn_start]
+set_property IOSTANDARD LVCMOS15 [get_ports btn_start]
+
 # Oscilador PL de 50 MHz (BANK35, 1,8 V).
 set_property -dict {PACKAGE_PIN J14 IOSTANDARD LVCMOS18} [get_ports sys_clk]
 create_clock -name sys_clk -period 20.000 [get_ports sys_clk]
