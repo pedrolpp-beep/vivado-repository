@@ -13,7 +13,7 @@ set bitstream_file [file join $root_dir build bitstream ${top}.bit]
 set rtl_files [list [file join $root_dir rtl top.vhd]]
 set xdc_files [list [file join $root_dir constraints ax7350b.xdc]]
 set include_dirs [list [file join $root_dir rtl]]
-set vhdl_defines {}
+set verilog_defines {}
 
 # Se houver mais de um cabo/FPGA, restrinja os padroes abaixo.
 # O ARM DAP do Zynq nao corresponde a xc7z035_*.
